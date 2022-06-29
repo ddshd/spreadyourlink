@@ -1,0 +1,21 @@
+#redirect-link {
+    text-overflow: ellipsis;
+    width: 50vw;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.redirect-buttons {
+    margin-top: 10px;
+}
+
+.redirect-buttons > * {
+    margin: 10px !important;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+}
+
+.redirect-button-icon {
+    margin-left: 0.5em;
+}
