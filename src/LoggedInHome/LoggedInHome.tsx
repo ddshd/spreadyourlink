@@ -1,51 +1,75 @@
 import React, {Component, ReactNode} from "react";
 import './LoggedInHome.css';
-import {Button, TextField, Tooltip, Zoom} from "@mui/material";
-import {ArrowForwardIos, OpenInFull} from "@mui/icons-material";
+import {Button, Chip, TextField, Tooltip, Zoom} from "@mui/material";
+import {ArrowForwardIos, Logout, OpenInFull} from "@mui/icons-material";
+import {redirect, removeSecretCodeCookie, setSecretCodeCookie} from "../other/cookies";
+import {WEBSITE_NAME} from "../other/variables";
+import {Link} from "react-router-dom";
+import restCalls from "../other/restCalls";
 
 interface LoggedInHomeProps {
     id: string
 }
 
-export default class LoggedInHome extends Component<LoggedInHomeProps> {
-    protected link: string = "https://example.com/users/https://example.com/users/https://example.com/users/https://example.com/users/https://example.com/users/https://examp";
+interface LoggedInHomeState {
+    link: string
+}
+
+export default class LoggedInHome extends Component<LoggedInHomeProps, LoggedInHomeState> {
 
     constructor(props: LoggedInHomeProps) {
         super(props);
+        this.state = {link: "Loading..."};
         this.handleFocus = this.handleFocus.bind(this);
+        setSecretCodeCookie(this.props.id);
+    }
+
+    async componentDidMount() {
+        this.setState({link: await restCalls.getLink(this.props.id)});
+    }
+
+    private isLoading() {
+        return this.state.link === 'Loading...';
     }
 
     private handleFocus(): void {
         // event.target.select();
-        navigator.clipboard.writeText(this.link).then();
-    };
-
-
-    private redirect(link: string) {
-        window.location.href = link;
+        if (!this.isLoading())
+            navigator.clipboard.writeText(this.state.link).then();
     };
 
     public render(): ReactNode {
         return (
             <div className="App-header App">
-                <h1>SpreadYourLinks</h1>
+                <h1>{WEBSITE_NAME}</h1>
+                <p style={{fontSize: '0.4em'}}>By using this service you agree to the Terms and Conditions, and Privacy Policy at <Link className="link-changed" to="/legal">/legal</Link>.</p>
                 <div>
-                    <Tooltip arrow TransitionComponent={Zoom} title="Copy link to clipboard">
+                    <Tooltip disableHoverListener={this.isLoading()} arrow TransitionComponent={Zoom} title="Copy link to clipboard">
                         <Button onClick={this.handleFocus}>
-                            <TextField style={{color: 'white'}} id="redirect-link" onFocus={this.handleFocus} disabled
-                                       value={this.link}/>
+                            <TextField id="redirect-link" onFocus={this.handleFocus} disabled
+                                       value={this.state.link}/>
                         </Button>
                     </Tooltip>
                 </div>
                 <div className="redirect-buttons">
-                    <Button onClick={() => this.redirect(`https://www.youtube.com/redirect?q=${this.link}`)} size="large" variant="outlined">Full screen
+                    <Button disabled={this.isLoading()} onClick={() => redirect(`https://www.youtube.com/redirect?q=${this.state.link}`)} size="large" variant="outlined">
+                        Full screen
                         <OpenInFull className="redirect-button-icon" />
+                        <Chip className="redirect-button-icon" disabled label="Tesla Only" />
                     </Button>
 
-                    <Button onClick={() => this.redirect(this.link)} size="large" variant="contained">Normal browser
+                    <Button disabled={this.isLoading()} onClick={() => redirect(this.state.link)} size="large" variant="contained">
+                        Current window
                         <ArrowForwardIos className="redirect-button-icon" />
                     </Button>
                 </div>
+
+                <Tooltip arrow TransitionComponent={Zoom} title="Logout">
+                    <Chip label={<Logout fontSize='small' />} className='logout-button' onClick={() => {
+                        removeSecretCodeCookie();
+                        redirect('/');
+                    }} color="error"/>
+                </Tooltip>
             </div>
         )
     }
