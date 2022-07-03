@@ -11,3 +11,16 @@
     justify-content: center;
     font-size: calc(10px + 2vmin);
 }
+
+.content > * {
+    padding-bottom: 100px;
+}
+
+.link-changed, .link-changed:visited, .link-changed:hover {
+    text-decoration: none;
+    color: blue;
+}
+
+* {
+    user-select: none;
+}
