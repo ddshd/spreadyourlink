@@ -3,7 +3,6 @@ import React, {Component, ReactNode} from "react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TermsAndConditions from "./terms";
 import PrivacyPolicy from "./privacy";
-import "./Legal.css";
 
 export class Legal extends Component {
     public render(): ReactNode {

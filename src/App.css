@@ -24,3 +24,8 @@
 * {
     user-select: none;
 }
+
+.AccordionDetails-text {
+    font-size: 0.6em;
+    text-align: left;
+}
