@@ -4,13 +4,16 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PolicyIcon from '@mui/icons-material/Policy';
 import {Link} from "react-router-dom";
+import {getSecretCodeCookie} from "./other/cookies";
 
 interface NavigationState {
     value: number
 }
 
 export default class Navigation extends React.Component<{}, NavigationState> {
+
     public constructor(props: {}) {
         super(props);
         this.state = {value: 0};
@@ -29,9 +32,10 @@ export default class Navigation extends React.Component<{}, NavigationState> {
                     value={value}
                     onChange={this.handleChange}
                 >
-                    <BottomNavigationAction component={Link} to="/" label="Home" icon={<LocationOnIcon/>}/>
+                    <BottomNavigationAction component={Link} to={`/${getSecretCodeCookie() || ''}`} label="Home" icon={<LocationOnIcon/>}/>
                     {/*<BottomNavigationAction component={Link}  to="/history" label="History" icon={<RestoreIcon/>}/>*/}
                     <BottomNavigationAction component={Link} to="/instructions" label="Instructions" icon={<FavoriteIcon/>}/>
+                    <BottomNavigationAction component={Link} to="/legal" label="Legal" icon={<PolicyIcon/>}/>
                 </BottomNavigation>
             </Box>
         );
