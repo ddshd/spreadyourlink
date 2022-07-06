@@ -1,11 +1,10 @@
 import React, {ReactNode} from 'react';
 import './App.css';
-import {Instructions} from "./Instructions/Instructions";
 import Navigation from "./Navigation";
 import {Route, Routes} from "react-router";
 import {BrowserRouter} from "react-router-dom";
 import {Home} from "./Home/Home";
-import {Legal} from "./Legal/Legal";
+import {NON_HOME_ROUTES} from "./other/variables";
 
 class App extends React.Component {
     public render(): ReactNode {
@@ -15,8 +14,9 @@ class App extends React.Component {
                     <Routes>
                         <Route path="/:userId" element={<Home/>}/>
                         <Route path="/" element={<Home/>}/>
-                        <Route path="/instructions" element={<Instructions/>}/>
-                        <Route path="/legal" element={<Legal/>}/>
+                        {
+                            NON_HOME_ROUTES.map(route => <Route path={route.location} element={route.component}/>)
+                        }
                     </Routes>
                 </div>
                 <Navigation></Navigation>
