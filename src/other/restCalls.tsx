@@ -1,10 +1,12 @@
+import {BACKEND_API} from "./variables";
+
 export interface createNewSecretCodeResponse {
     "inserted": boolean,
     "secretCode": string
 }
 
 export default class restCalls {
-    private static baseURL: string = "http://localhost:8080";
+    private static baseURL: string = BACKEND_API;
 
     public static async getLink(secretCode: string): Promise<string> {
         const requestOptions: RequestInit = {
