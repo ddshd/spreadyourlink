@@ -34,8 +34,9 @@ export default class LoggedInHome extends Component<LoggedInHomeProps, LoggedInH
 
     private handleFocus(): void {
         // event.target.select();
-        if (!this.isLoading())
+        if (!this.isLoading()) {
             navigator.clipboard.writeText(this.state.link).then();
+        }
     };
 
     public render(): ReactNode {
