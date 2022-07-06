@@ -1,4 +1,5 @@
 import Cookies from "universal-cookie";
+
 const cookies = new Cookies();
 
 export function getSecretCodeCookie() {
@@ -6,7 +7,7 @@ export function getSecretCodeCookie() {
 }
 
 export function setSecretCodeCookie(secretCode: string) {
-    cookies.set('secretCode', secretCode, { path: '/' });
+    cookies.set('secretCode', secretCode, {path: '/'});
 }
 
 export function removeSecretCodeCookie() {
@@ -15,4 +16,4 @@ export function removeSecretCodeCookie() {
 
 export function redirect(link: string) {
     window.location.href = link;
-};
+}

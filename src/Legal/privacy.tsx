@@ -273,7 +273,8 @@ export default function PrivacyPolicy() {
             </ul>
             <p>This Privacy Policy has been created with the help of the <a className="link-changed"
                                                                             href="https://www.termsfeed.com/privacy-policy-generator/"
-                                                                            target="_blank" rel="noreferrer">TermsFeed Privacy Policy
+                                                                            target="_blank" rel="noreferrer">TermsFeed
+                Privacy Policy
                 Generator</a>.</p>
         </div>
     );

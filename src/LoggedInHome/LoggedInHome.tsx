@@ -43,9 +43,11 @@ export default class LoggedInHome extends Component<LoggedInHomeProps, LoggedInH
         return (
             <div className="App-header App">
                 <h1>{WEBSITE_NAME}</h1>
-                <p style={{fontSize: '0.4em'}}>By using this service you agree to the Terms and Conditions, and Privacy Policy at <Link className="link-changed" to="/legal">/legal</Link>.</p>
+                <p style={{fontSize: '0.4em'}}>By using this service you agree to the Terms and Conditions, and Privacy
+                    Policy at <Link className="link-changed" to="/legal">/legal</Link>.</p>
                 <div>
-                    <Tooltip disableHoverListener={this.isLoading()} arrow TransitionComponent={Zoom} title="Copy link to clipboard">
+                    <Tooltip disableHoverListener={this.isLoading()} arrow TransitionComponent={Zoom}
+                             title="Copy link to clipboard">
                         <Button onClick={this.handleFocus}>
                             <TextField id="redirect-link" onFocus={this.handleFocus} disabled
                                        value={this.state.link}/>
@@ -53,20 +55,23 @@ export default class LoggedInHome extends Component<LoggedInHomeProps, LoggedInH
                     </Tooltip>
                 </div>
                 <div className="redirect-buttons">
-                    <Button disabled={this.isLoading()} onClick={() => redirect(`https://www.youtube.com/redirect?q=${this.state.link}`)} size="large" variant="outlined">
+                    <Button disabled={this.isLoading()}
+                            onClick={() => redirect(`https://www.youtube.com/redirect?q=${this.state.link}`)}
+                            size="large" variant="outlined">
                         Full screen
-                        <OpenInFull className="redirect-button-icon" />
-                        <Chip className="redirect-button-icon" disabled label="Tesla Only" />
+                        <OpenInFull className="redirect-button-icon"/>
+                        <Chip className="redirect-button-icon" disabled label="Tesla Only"/>
                     </Button>
 
-                    <Button disabled={this.isLoading()} onClick={() => redirect(this.state.link)} size="large" variant="contained">
+                    <Button disabled={this.isLoading()} onClick={() => redirect(this.state.link)} size="large"
+                            variant="contained">
                         Current window
-                        <ArrowForwardIos className="redirect-button-icon" />
+                        <ArrowForwardIos className="redirect-button-icon"/>
                     </Button>
                 </div>
 
                 <Tooltip arrow TransitionComponent={Zoom} title="Logout">
-                    <Chip label={<Logout fontSize='small' />} className='logout-button' onClick={() => {
+                    <Chip label={<Logout fontSize='small'/>} className='logout-button' onClick={() => {
                         removeSecretCodeCookie();
                         redirect('/');
                     }} color="error"/>

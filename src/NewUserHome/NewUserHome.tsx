@@ -73,8 +73,9 @@ export default class NewUserHome extends Component<{}, NewUserHomeState> {
                                             onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
                                                 this.setState({userEnteredSecretCode: e.target.value})}
                                         />
-                                        <Button style={{marginTop: '10px'}} color='success' fullWidth variant='contained' type="submit"
-                                                    size="small">Go</Button>
+                                        <Button style={{marginTop: '10px'}} color='success' fullWidth
+                                                variant='contained' type="submit"
+                                                size="small">Go</Button>
                                     </form>
                                 </span>
                             </CardContent>

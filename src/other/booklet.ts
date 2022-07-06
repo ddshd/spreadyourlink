@@ -14,7 +14,7 @@ export function booklet(secretCode: string): string {
             "secretCode": "${secretCode}",
             "link": window.location.href
         }));`
-        .replaceAll('\n','')
+        .replaceAll('\n', '')
         .replaceAll(new RegExp(/\s*\{\s*/gm), '{')
         .replaceAll(new RegExp(/\s*}\s*/gm), '}')
         .replaceAll(new RegExp(/\s*\)\s*/gm), ')')
