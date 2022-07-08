@@ -65,7 +65,7 @@ export default class NewUserHome extends Component<{}, NewUserHomeState> {
                                     Enter it here
                                 </Typography>
                                 <span>
-                                    <form action={`/${this.state.userEnteredSecretCode}`}>
+                                    <form onSubmit={() => redirect(`/${this.state.userEnteredSecretCode}`)}>
                                         <TextField
                                             color='success'
                                             id="outlined-name"
