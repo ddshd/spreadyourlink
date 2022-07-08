@@ -14,8 +14,17 @@ export function removeSecretCodeCookie() {
     cookies.remove('secretCode');
 }
 
+/**
+ * Redirect the user to another page
+ * @param link - The link to redirect the user to
+ * @returns true if this action will cause the page to
+ * reload or leave the site entirely.
+ *
+ * Used to avoid double API
+ * calls, due to a redirect back to the same page.
+ */
 export function redirect(link: string): boolean {
-    if (process.env.REACT_APP_REAL_SERVER) {
+    if (link.includes('http') || process.env.REACT_APP_REAL_SERVER) {
         window.location.href = link;
         return true;
     }
