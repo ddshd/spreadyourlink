@@ -14,11 +14,13 @@ export function removeSecretCodeCookie() {
     cookies.remove('secretCode');
 }
 
-export function redirect(link: string) {
+export function redirect(link: string): boolean {
     if (process.env.REACT_APP_REAL_SERVER) {
         window.location.href = link;
+        return true;
     }
     else {
         window.location.hash = link;
+        return false;
     }
 }

@@ -28,7 +28,6 @@ class App extends React.Component {
 class Router extends React.Component<{ children: ReactNode }> {
     public render() {
         let {children} = this.props;
-        console.log(process.env.REACT_APP_REAL_SERVER);
         if (process.env.REACT_APP_REAL_SERVER) {
             return (
                 <BrowserRouter>

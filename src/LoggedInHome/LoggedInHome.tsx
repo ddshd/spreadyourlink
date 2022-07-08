@@ -26,8 +26,9 @@ export default class LoggedInHome extends Component<LoggedInHomeProps, LoggedInH
 
     async componentDidMount() {
         if (!window.location.href.includes(this.props.id)) {
-            redirect(`/${this.props.id}`);
-            return;
+            if (redirect(`/${this.props.id}`)) {
+                return;
+            }
         }
         this.setState({link: await restCalls.getLink(this.props.id)});
     }
