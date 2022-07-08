@@ -45,7 +45,7 @@ export default class Navigation extends React.Component<{}, NavigationState> {
                     {/*<BottomNavigationAction component={Link} to="/legal" label="Legal" icon={<PolicyIcon/>}/>*/}
 
                     {
-                        NON_HOME_ROUTES.map(route => <BottomNavigationAction component={Link} to={route.location}
+                        NON_HOME_ROUTES.map(route => <BottomNavigationAction key={route.location} component={Link} to={route.location}
                                                                              label={route.name} icon={route.icon}/>)
                     }
 

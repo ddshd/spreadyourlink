@@ -15,5 +15,10 @@ export function removeSecretCodeCookie() {
 }
 
 export function redirect(link: string) {
-    window.location.href = link;
+    if (process.env.REACT_APP_REAL_SERVER) {
+        window.location.href = link;
+    }
+    else {
+        window.location.hash = link;
+    }
 }
