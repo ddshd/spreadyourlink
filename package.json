@@ -1,6 +1,6 @@
 {
   "name": "speakyourlink",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.3",
@@ -27,6 +27,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "export": "rm -rf export/ && FILES=$(ls && echo '.github' | grep '') bash -c 'mkdir export/ && cp -rf $FILES export/'",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
