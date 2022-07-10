@@ -5,7 +5,7 @@ import NewUserHome from "../NewUserHome/NewUserHome";
 import {getSecretCodeCookie} from "../other/cookies";
 
 
-export function Home() {
+export default function Home() {
     let {userId} = useParams();
     userId = userId || getSecretCodeCookie();
 
