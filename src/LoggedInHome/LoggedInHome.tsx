@@ -6,6 +6,7 @@ import {redirect, removeSecretCodeCookie, setSecretCodeCookie} from "../other/co
 import {WEBSITE_NAME} from "../other/variables";
 import {Link} from "react-router-dom";
 import restCalls from "../other/restCalls";
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 interface LoggedInHomeProps {
     id: string
@@ -32,17 +33,6 @@ export default class LoggedInHome extends Component<LoggedInHomeProps, LoggedInH
         }
         this.setState({link: await restCalls.getLink(this.props.id)});
     }
-
-    private isLoading() {
-        return this.state.link === 'Loading...';
-    }
-
-    private handleFocus(): void {
-        // event.target.select();
-        if (!this.isLoading()) {
-            navigator.clipboard.writeText(this.state.link).then();
-        }
-    };
 
     public render(): ReactNode {
         return (
@@ -75,13 +65,32 @@ export default class LoggedInHome extends Component<LoggedInHomeProps, LoggedInH
                     </Button>
                 </div>
 
-                <Tooltip arrow TransitionComponent={Zoom} title="Logout">
-                    <Chip label={<Logout fontSize='small'/>} className='logout-button' onClick={() => {
-                        removeSecretCodeCookie();
-                        redirect('/');
-                    }} color="error"/>
-                </Tooltip>
+                <div className='top-buttons'>
+                    <Chip className='bookmark-button-chip' color="warning" label={
+                        <span className='bookmark-button'>
+                                <BookmarkIcon fontSize='small'/> Bookmark this page for easy access
+                            </span>
+                    }/>
+
+                    <Tooltip arrow TransitionComponent={Zoom} title="Logout">
+                        <Chip className='logout-button' label={<Logout fontSize='small'/>} onClick={() => {
+                            removeSecretCodeCookie();
+                            redirect('/');
+                        }} color="error"/>
+                    </Tooltip>
+                </div>
             </div>
         )
     }
+
+    private isLoading() {
+        return this.state.link === 'Loading...';
+    }
+
+    private handleFocus(): void {
+        // event.target.select();
+        if (!this.isLoading()) {
+            navigator.clipboard.writeText(this.state.link).then();
+        }
+    };
 }

@@ -20,7 +20,7 @@
     margin-left: 0.5em;
 }
 
-.logout-button {
+.top-buttons {
     position: fixed !important;
     top: 10px;
     right: 15px;
@@ -28,4 +28,13 @@
 
 .logout-button > * {
     padding: 1.3em !important;
+}
+
+.bookmark-button {
+    align-items: center;
+    display: flex;
+}
+
+.bookmark-button-chip {
+    margin-right: 10px;
 }
