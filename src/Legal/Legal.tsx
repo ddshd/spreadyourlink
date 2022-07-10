@@ -1,4 +1,4 @@
-import {Accordion, AccordionDetails, AccordionSummary, Typography} from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, Button, Typography} from "@mui/material";
 import React, {Component, ReactNode} from "react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TermsAndConditions from "./terms";
@@ -82,6 +82,20 @@ export class Legal extends Component {
                         <div style={{textAlign: "left"}}>
                             {PrivacyPolicy()}
                         </div>
+                    </AccordionDetails>
+                </Accordion>
+
+
+                <Accordion style={{width: "70vw"}}>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography>Project License</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Button href="https://raw.githubusercontent.com/ddshd/spreadyourlink/main/LICENSE">Front-end license details</Button>
                     </AccordionDetails>
                 </Accordion>
             </div>
