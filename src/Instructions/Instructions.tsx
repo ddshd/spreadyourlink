@@ -16,7 +16,7 @@ export default function Instructions(): ReactElement {
 
                 <>
                     <h2 style={{marginBottom: '0px'}}>How do I update my link?</h2>
-                    <h3 style={{marginTop: '0px'}}>Here are a few option:</h3>
+                    <h3 style={{marginTop: '0px'}}>Here are a few options:</h3>
                     <Accordion style={{width: "70vw"}}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon/>}
