@@ -27,8 +27,7 @@ export function redirect(link: string): boolean {
     if (link.includes('http') || process.env.REACT_APP_REAL_SERVER) {
         window.location.href = link;
         return true;
-    }
-    else {
+    } else {
         window.location.hash = link;
         return false;
     }

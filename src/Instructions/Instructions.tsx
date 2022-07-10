@@ -1,24 +1,22 @@
 import {Accordion, AccordionDetails, AccordionSummary, Button, Typography} from "@mui/material";
-import React, {Component, ReactNode} from "react";
+import React, {ReactElement} from "react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {booklet} from "../other/booklet";
 import {getSecretCodeCookie} from "../other/cookies";
 import {Link} from "react-router-dom";
 
-export class Instructions extends Component {
-    protected bookletText = booklet(getSecretCodeCookie());
+export default function Instructions(): ReactElement {
+    const bookletText = booklet(getSecretCodeCookie());
 
+    return (
+        <div className="App-header App">
+            <h1>Instructions</h1>
 
-    public render(): ReactNode {
-        return (
-            <div className="App-header App">
-                <h1>Instructions</h1>
+            {getSecretCodeCookie() ?
 
-                {getSecretCodeCookie() ?
-
-                    <>
-                        <h2 style={{marginBottom: '0px'}}>How do I update my link?</h2>
-                        <h3 style={{marginTop: '0px'}}>Here are a few option:</h3>
+                <>
+                    <h2 style={{marginBottom: '0px'}}>How do I update my link?</h2>
+                    <h3 style={{marginTop: '0px'}}>Here are a few option:</h3>
                     <Accordion style={{width: "70vw"}}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon/>}
@@ -32,30 +30,33 @@ export class Instructions extends Component {
                                 <div>
                                     Drag the following link to your bookmarks:
                                     <Button style={{marginLeft: '10px'}}
-                                            href={this.bookletText} variant="contained"
-                                            onClick={this.prepareBookmark}>SpreadYourLink</Button>
+                                            href={bookletText} variant="contained"
+                                            onClick={(e: any) => {
+                                                e.preventDefault()
+                                            }}>SpreadYourLink</Button>
                                 </div>
                                 <div style={{marginTop: '10px'}}>
                                     Or bookmark this page and replace URL with the text below:
-                                    <pre style={{wordBreak: "break-all", whiteSpace: "pre-wrap", userSelect: "all"}}>{this.bookletText}</pre>
+                                    <pre style={{
+                                        wordBreak: "break-all",
+                                        whiteSpace: "pre-wrap",
+                                        userSelect: "all"
+                                    }}>{bookletText}</pre>
                                 </div>
                                 <div>
-                                    Now you can simply call the bookmark on any page you'd like to set the link to. <Link className='link-changed' to="/legal">Ensure the link is acceptable within the terms</Link>.
+                                    Now you can simply call the bookmark on any page you'd like to set the link
+                                    to. <Link className='link-changed' to="/legal">Ensure the link is acceptable within
+                                    the terms</Link>.
                                 </div>
                             </div>
                         </AccordionDetails>
                     </Accordion>
-                    </>
+                </>
 
 
-                    : <p>Please sign in using your secret code on the home page</p>
+                : <p>Please sign in using your secret code on the home page</p>
 
-                }
-            </div>
-        )
-    }
-
-    private prepareBookmark(e: any) {
-        e.preventDefault();
-    }
+            }
+        </div>
+    )
 }

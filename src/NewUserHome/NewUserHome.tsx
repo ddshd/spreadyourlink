@@ -1,4 +1,4 @@
-import React, {Component, ReactNode} from "react";
+import React, {ReactElement, ReactNode, useState} from "react";
 import {
     Button,
     Card,
@@ -37,119 +37,36 @@ interface NewUserHomeState {
     rateLimitExpire: number;
 }
 
-export default class NewUserHome extends Component<{}, NewUserHomeState> {
-    public constructor(props: {}) {
-        super(props);
-        this.state = {
-            userEnteredSecretCode: "",
-            dialogOpen: false,
-            rateLimitExpire: 0
-        };
-        removeSecretCodeCookie();
-        this.handleClickOpen = this.handleClickOpen.bind(this);
-        this.handleClose = this.handleClose.bind(this);
-    }
+export default function NewUserHome(): ReactElement {
+    const [state, setState] = useState<NewUserHomeState>({
+        userEnteredSecretCode: "",
+        dialogOpen: false,
+        rateLimitExpire: 0
+    });
+    removeSecretCodeCookie();
 
-    public render(): ReactNode {
-        return (
-            <div className="App-header App">
-                <h1>Welcome to {WEBSITE_NAME}</h1>
+    async function handleClose(termsAgreed: boolean) {
+        setState({...state, dialogOpen: false});
+        if (termsAgreed) {
+            const apiRes = await restCalls.createNewSecretCode();
+            const apiResData = await apiRes.json();
 
-                <Grid container
-                      direction="column"
-                      justifyContent="center"
-                      alignItems="center" spacing={2}>
-                    <Grid item xs={3}>
-                        <Card sx={{width: 385}}>
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Know your secret code?
-                                </Typography>
-                                <Typography sx={{mb: 1.5}} color="text.secondary">
-                                    Enter it here
-                                </Typography>
-                                <span>
-                                    <form onSubmit={() => redirect(`/${this.state.userEnteredSecretCode}`)}>
-                                        <TextField
-                                            color='success'
-                                            id="outlined-name"
-                                            label="Secret Code"
-                                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
-                                                this.setState({userEnteredSecretCode: e.target.value})}
-                                        />
-                                        <Button style={{marginTop: '10px'}} color='success' fullWidth
-                                                variant='contained' type="submit"
-                                                size="small">Go</Button>
-                                    </form>
-                                </span>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={3}>
-                        <Card sx={{width: 385}}>
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    New user?
-                                </Typography>
-                                {this.state.rateLimitExpire + Date.now() - 2 < Date.now() ?
-                                    (<><Typography sx={{mb: 1.5}} color="text.secondary">
-                                        Get a secret code
-                                    </Typography><span>
-                                            <CardActions disableSpacing>
-                                                <Button color='success' onClick={this.handleClickOpen} fullWidth
-                                                        variant='contained' type="submit" size="small">Go</Button>
-                                            </CardActions>
-                                        </span></>) : this.rateLimitTimer()
-                                }
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                </Grid>
-                {this.signupDialog()}
-            </div>
-        )
-    }
-
-
-    private rateLimitTimer() {
-        const timerChild = (data: { remainingTime: any }) => {
-            return (
-                <span className="countdown-text">
-                <p>Try again in:</p>
-                <p className="countdown-value">{data.remainingTime}</p>
-                <p>seconds</p>
-            </span>
-            );
+            if (apiRes.ok && apiResData.inserted) {
+                redirect(`/${apiResData.secretCode}`);
+            } else if (apiRes.headers.get('RateLimit-Reset')) {
+                setState({...state, rateLimitExpire: +(apiRes.headers.get('RateLimit-Reset') || "0")});
+            }
         }
-
-        return (<span className="timer-wrapper">
-            <CountdownCircleTimer
-                isPlaying
-                duration={this.state.rateLimitExpire}
-                colors={["#ffe26a", "#75c9b7", "#b6c48e", "#abd699"]}
-                colorsTime={
-                    [Math.round(this.state.rateLimitExpire * 0.8), Math.round(this.state.rateLimitExpire * 0.6),
-                        Math.round(this.state.rateLimitExpire * 0.4), 0]
-                }
-                onComplete={() => {
-                    this.setState({
-                        rateLimitExpire: 0
-                    });
-                }}
-            >
-                {timerChild}
-            </CountdownCircleTimer>
-        </span>);
     }
 
-    private signupDialog(): ReactNode {
+    function signupDialog(): ReactNode {
         return (
             <div>
                 <Dialog
-                    open={this.state.dialogOpen}
+                    open={state.dialogOpen}
                     TransitionComponent={Transition}
                     keepMounted
-                    onClose={() => this.handleClose(false)}
+                    onClose={() => handleClose(false)}
                     aria-describedby="alert-dialog-slide-description"
                 >
                     <DialogTitle>Do you agree to the following terms?</DialogTitle>
@@ -163,29 +80,111 @@ export default class NewUserHome extends Component<{}, NewUserHomeState> {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => this.handleClose(false)}>Disagree</Button>
-                        <Button onClick={() => this.handleClose(true)}>Agree</Button>
+                        <Button onClick={() => handleClose(false)}>Disagree</Button>
+                        <Button onClick={() => handleClose(true)}>Agree</Button>
                     </DialogActions>
                 </Dialog>
             </div>
         );
     }
 
-    private handleClickOpen() {
-        this.setState({dialogOpen: true});
-    };
+    function handleClickOpen() {
+        setState({...state, dialogOpen: true});
+    }
 
-    private async handleClose(termsAgreed: boolean) {
-        this.setState({dialogOpen: false});
-        if (termsAgreed) {
-            const apiRes = await restCalls.createNewSecretCode();
-            const apiResData = await apiRes.json();
-
-            if (apiRes.ok && apiResData.inserted) {
-                redirect(`/${apiResData.secretCode}`);
-            } else if (apiRes.headers.get('RateLimit-Reset')) {
-                this.setState({rateLimitExpire: +(apiRes.headers.get('RateLimit-Reset') || "0")});
-            }
+    function rateLimitTimer(): ReactElement {
+        const timerChild = (data: { remainingTime: any }) => {
+            return (
+                <span className="countdown-text">
+                <p>Try again in:</p>
+                <p className="countdown-value">{data.remainingTime}</p>
+                <p>seconds</p>
+            </span>
+            );
         }
-    };
+
+        return (<span className="timer-wrapper">
+            <CountdownCircleTimer
+                isPlaying
+                duration={state.rateLimitExpire}
+                colors={["#ffe26a", "#75c9b7", "#b6c48e", "#abd699"]}
+                colorsTime={
+                    [Math.round(state.rateLimitExpire * 0.8), Math.round(state.rateLimitExpire * 0.6),
+                        Math.round(state.rateLimitExpire * 0.4), 0]
+                }
+                onComplete={() => {
+                    setState({
+                        ...state,
+                        rateLimitExpire: 0
+                    });
+                }}
+            >
+                {timerChild}
+            </CountdownCircleTimer>
+        </span>);
+    }
+
+    return (
+        <div className="App-header App">
+            <h1>Welcome to {WEBSITE_NAME}</h1>
+
+            <Grid container
+                  direction="column"
+                  justifyContent="center"
+                  alignItems="center" spacing={2}>
+                <Grid item xs={3}>
+                    <Card sx={{width: 385}}>
+                        <CardContent>
+                            <Typography gutterBottom variant="h5" component="div">
+                                Know your secret code?
+                            </Typography>
+                            <Typography sx={{mb: 1.5}} color="text.secondary">
+                                Enter it here
+                            </Typography>
+                            <span>
+                                <form onSubmit={(e) => {
+                                    e.preventDefault();
+                                    redirect(`/${state.userEnteredSecretCode}`);
+                                }}>
+                                    <TextField
+                                        color='success'
+                                        id="outlined-name"
+                                        label="Secret Code"
+                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
+                                            setState({
+                                                ...state,
+                                                userEnteredSecretCode: e.target.value
+                                            })}
+                                    />
+                                    <Button style={{marginTop: '10px'}} color='success' fullWidth
+                                            variant='contained' type="submit"
+                                            size="small">Go</Button>
+                                </form>
+                            </span>
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xs={3}>
+                    <Card sx={{width: 385}}>
+                        <CardContent>
+                            <Typography gutterBottom variant="h5" component="div">
+                                New user?
+                            </Typography>
+                            {state.rateLimitExpire + Date.now() - 2 < Date.now() ?
+                                (<><Typography sx={{mb: 1.5}} color="text.secondary">
+                                    Get a secret code
+                                </Typography><span>
+                                            <CardActions disableSpacing>
+                                                <Button color='success' onClick={handleClickOpen} fullWidth
+                                                        variant='contained' type="submit" size="small">Go</Button>
+                                            </CardActions>
+                                        </span></>) : rateLimitTimer()
+                            }
+                        </CardContent>
+                    </Card>
+                </Grid>
+            </Grid>
+            {signupDialog()}
+        </div>
+    );
 }

@@ -1,6 +1,6 @@
-import {Instructions} from "../Instructions/Instructions";
+import Instructions from "../Instructions/Instructions";
 import React from "react";
-import {Legal} from "../Legal/Legal";
+import Legal from "../Legal/Legal";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import PolicyIcon from '@mui/icons-material/Policy';
 
