@@ -21,8 +21,9 @@
     color: blue;
 }
 
-* {
+*:not(input) {
     user-select: none;
+    -webkit-user-select: none;
 }
 
 .AccordionDetails-text {
