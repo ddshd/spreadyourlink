@@ -7,7 +7,8 @@ import PolicyIcon from '@mui/icons-material/Policy';
 export const WEBSITE_NAME: string = "SpreadYourLinks";
 export const CONTACT_EMAIL: string = "spreadyourlinks@iamdhrumilshah.com";
 export const ADDITIONAL_SERVICES: string = "Google Analytics, Google Cloud Platform, Heroku, Google Safe Browsing API, MongoDB Cloud, and Github";
-export const BACKEND_API: string = "http://localhost:8080";
+export const BACKEND_API: string = process.env.REACT_APP_BACKEND_API ||
+    `${window.location.protocol}//${window.location.hostname}:8080`;
 
 export function WEBSITE_URL(): string {
     return window.location.hostname;
