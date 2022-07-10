@@ -3,6 +3,7 @@ import React, {Component, ReactNode} from "react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {booklet} from "../other/booklet";
 import {getSecretCodeCookie} from "../other/cookies";
+import {Link} from "react-router-dom";
 
 export class Instructions extends Component {
     protected bookletText = booklet(getSecretCodeCookie());
@@ -15,6 +16,9 @@ export class Instructions extends Component {
 
                 {getSecretCodeCookie() ?
 
+                    <>
+                        <h2 style={{marginBottom: '0px'}}>How do I update my link?</h2>
+                        <h3 style={{marginTop: '0px'}}>Here are a few option:</h3>
                     <Accordion style={{width: "70vw"}}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon/>}
@@ -25,14 +29,23 @@ export class Instructions extends Component {
                         </AccordionSummary>
                         <AccordionDetails>
                             <div className="AccordionDetails-text">
-                                Drag the following link to your bookmarks:
-                                <Button style={{marginLeft: '10px'}}
-                                        href={this.bookletText} variant="contained"
-                                        onClick={this.prepareBookmark}>SpreadYourLink</Button>
-                                <pre style={{wordBreak: "break-word", whiteSpace: "pre-wrap"}}>{this.bookletText}</pre>
+                                <div>
+                                    Drag the following link to your bookmarks:
+                                    <Button style={{marginLeft: '10px'}}
+                                            href={this.bookletText} variant="contained"
+                                            onClick={this.prepareBookmark}>SpreadYourLink</Button>
+                                </div>
+                                <div style={{marginTop: '10px'}}>
+                                    Or bookmark this page and replace URL with the text below:
+                                    <pre style={{wordBreak: "break-all", whiteSpace: "pre-wrap", userSelect: "all"}}>{this.bookletText}</pre>
+                                </div>
+                                <div>
+                                    Now you can simply call the bookmark on any page you'd like to set the link to. <Link className='link-changed' to="/legal">Ensure the link is acceptable within the terms</Link>.
+                                </div>
                             </div>
                         </AccordionDetails>
                     </Accordion>
+                    </>
 
 
                     : <p>Please sign in using your secret code on the home page</p>
