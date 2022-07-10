@@ -15,9 +15,11 @@ import {
     Typography
 } from "@mui/material";
 import {redirect, removeSecretCodeCookie} from "../other/cookies";
+import './NewUserHome.css';
 import {TransitionProps} from "@mui/material/transitions";
 import {WEBSITE_NAME} from "../other/variables";
 import restCalls from "../other/restCalls";
+import {CountdownCircleTimer} from "react-countdown-circle-timer";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -32,6 +34,7 @@ const Transition = React.forwardRef(function Transition(
 interface NewUserHomeState {
     userEnteredSecretCode: string;
     dialogOpen: boolean;
+    rateLimitExpire: number;
 }
 
 export default class NewUserHome extends Component<{}, NewUserHomeState> {
@@ -39,7 +42,8 @@ export default class NewUserHome extends Component<{}, NewUserHomeState> {
         super(props);
         this.state = {
             userEnteredSecretCode: "",
-            dialogOpen: false
+            dialogOpen: false,
+            rateLimitExpire: 0
         };
         removeSecretCodeCookie();
         this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -87,15 +91,16 @@ export default class NewUserHome extends Component<{}, NewUserHomeState> {
                                 <Typography gutterBottom variant="h5" component="div">
                                     New user?
                                 </Typography>
-                                <Typography sx={{mb: 1.5}} color="text.secondary">
-                                    Get a secret code
-                                </Typography>
-                                <span>
-                                    <CardActions disableSpacing>
-                                        <Button color='success' onClick={this.handleClickOpen} fullWidth
-                                                variant='contained' type="submit" size="small">Go</Button>
-                                    </CardActions>
-                                </span>
+                                {this.state.rateLimitExpire + Date.now() - 2 < Date.now() ?
+                                    (<><Typography sx={{mb: 1.5}} color="text.secondary">
+                                        Get a secret code
+                                    </Typography><span>
+                                            <CardActions disableSpacing>
+                                                <Button color='success' onClick={this.handleClickOpen} fullWidth
+                                                        variant='contained' type="submit" size="small">Go</Button>
+                                            </CardActions>
+                                        </span></>) : this.rateLimitTimer()
+                                }
                             </CardContent>
                         </Card>
                     </Grid>
@@ -103,6 +108,38 @@ export default class NewUserHome extends Component<{}, NewUserHomeState> {
                 {this.signupDialog()}
             </div>
         )
+    }
+
+
+    private rateLimitTimer() {
+        const timerChild = (data: { remainingTime: any }) => {
+            return (
+                <span className="countdown-text">
+                <p>Try again in:</p>
+                <p className="countdown-value">{data.remainingTime}</p>
+                <p>seconds</p>
+            </span>
+            );
+        }
+
+        return (<span className="timer-wrapper">
+            <CountdownCircleTimer
+                isPlaying
+                duration={this.state.rateLimitExpire}
+                colors={["#ffe26a", "#75c9b7", "#b6c48e", "#abd699"]}
+                colorsTime={
+                    [Math.round(this.state.rateLimitExpire * 0.8), Math.round(this.state.rateLimitExpire * 0.6),
+                        Math.round(this.state.rateLimitExpire * 0.4), 0]
+                }
+                onComplete={() => {
+                    this.setState({
+                        rateLimitExpire: 0
+                    });
+                }}
+            >
+                {timerChild}
+            </CountdownCircleTimer>
+        </span>);
     }
 
     private signupDialog(): ReactNode {
@@ -142,8 +179,12 @@ export default class NewUserHome extends Component<{}, NewUserHomeState> {
         this.setState({dialogOpen: false});
         if (termsAgreed) {
             const apiRes = await restCalls.createNewSecretCode();
-            if (apiRes.inserted) {
-                redirect(`/${apiRes.secretCode}`);
+            const apiResData = await apiRes.json();
+
+            if (apiRes.ok && apiResData.inserted) {
+                redirect(`/${apiResData.secretCode}`);
+            } else if (apiRes.headers.get('RateLimit-Reset')) {
+                this.setState({rateLimitExpire: +(apiRes.headers.get('RateLimit-Reset') || "0")});
             }
         }
     };

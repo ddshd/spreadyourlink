@@ -1,0 +1,12 @@
+.countdown-text > * {
+    margin: 0px;
+}
+
+.countdown-text > *:not(.countdown-value) {
+    font-size: 18px;
+}
+
+.timer-wrapper {
+    display: flex;
+    justify-content: center;
+}

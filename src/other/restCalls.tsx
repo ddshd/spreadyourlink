@@ -17,12 +17,12 @@ export default class restCalls {
         return apiRes.link;
     }
 
-    public static async createNewSecretCode(): Promise<createNewSecretCodeResponse> {
+    public static async createNewSecretCode(): Promise<Response> {
         const requestOptions: RequestInit = {
             method: 'GET',
             redirect: 'follow'
         };
-        return await (await fetch(`${this.baseURL}/createNewSecretCode`, requestOptions)).json();
+        return fetch(`${this.baseURL}/createNewSecretCode`, requestOptions);
     }
 
 }
