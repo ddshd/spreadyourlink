@@ -6,6 +6,22 @@
     display: inline-block;
 }
 
+.loading-redirect-buttons-container {
+    display: flex;
+    flex-flow: column wrap;
+    align-content: space-between;
+    flex-direction: row;
+    position: relative;
+    width: 500px;
+    margin-top: 17px;
+}
+
+.loading-redirect-buttons {
+    width: 210px;
+    height: 65px !important;
+    position: absolute;
+}
+
 .redirect-buttons {
     margin-top: 10px;
 }
@@ -37,4 +53,8 @@
 
 .bookmark-button-chip {
     margin-right: 10px;
+}
+
+.Toastify > * {
+    font-size: 1.1rem;
 }
