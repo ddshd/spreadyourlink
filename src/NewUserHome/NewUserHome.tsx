@@ -147,11 +147,11 @@ export default function NewUserHome(): ReactElement {
                                     redirect(`/${state.userEnteredSecretCode}`);
                                 }}>
                                     <TextField
+                                        name='secret-code'
                                         autoCorrect='off'
                                         autoCapitalize='off'
                                         type="text"
                                         color='success'
-                                        id="outlined-name"
                                         label="Secret Code"
                                         onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
                                             setState({
