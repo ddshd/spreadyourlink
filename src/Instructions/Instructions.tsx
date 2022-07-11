@@ -9,7 +9,7 @@ export default function Instructions(): ReactElement {
     const bookletText = booklet(getSecretCodeCookie());
 
     return (
-        <div className="App-header App">
+        <div className="App-header App fix-nav-hidden-content">
             <h1>Instructions</h1>
 
             {getSecretCodeCookie() ?

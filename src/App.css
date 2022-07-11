@@ -12,8 +12,8 @@
     font-size: calc(10px + 2vmin);
 }
 
-.content > * {
-    padding-bottom: 100px;
+.fix-nav-hidden-content {
+    padding-bottom: 200px;
 }
 
 .link-changed, .link-changed:visited, .link-changed:hover {
@@ -21,9 +21,14 @@
     color: blue;
 }
 
-*:not(input) {
+* {
     user-select: none;
     -webkit-user-select: none;
+}
+
+input[name=secret-code] {
+    user-select: initial;
+    -webkit-user-select: initial;
 }
 
 .AccordionDetails-text {

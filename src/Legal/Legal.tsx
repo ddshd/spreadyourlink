@@ -6,7 +6,7 @@ import React, {ReactElement} from "react";
 
 export default function Legal(): ReactElement {
     return (
-        <div className="App-header App">
+        <div className="App-header App fix-nav-hidden-content">
             <h1>Legal</h1>
 
             <Accordion style={{width: "70vw"}}>
