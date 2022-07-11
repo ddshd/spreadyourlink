@@ -15,11 +15,11 @@ interface LoggedInHomeProps {
 }
 
 interface LoggedInHomeState {
-    link: string,
-    timeout?: any
+    link: string
 }
 
 export default function LoggedInHome(props: LoggedInHomeProps): ReactElement {
+
     const missingSecretCodeRedirectTime = 5000;
     const [state, setState] = useState<LoggedInHomeState>({link: "Loading..."});
     setSecretCodeCookie(props.id);
@@ -40,15 +40,16 @@ export default function LoggedInHome(props: LoggedInHomeProps): ReactElement {
                     closeOnClick: false,
                     pauseOnHover: true,
                     draggable: true,
-                    progress: undefined,
+                    progress: undefined
                 });
-                setState({
-                    ...state,
-                    timeout: setTimeout(() => logout(), missingSecretCodeRedirectTime + 1500)
-                });
+                setTimeout(() => {
+                    if (window.location.href.includes(props.id)) {
+                        logout();
+                    }
+                }, missingSecretCodeRedirectTime + 1500)
                 return;
             }
-            setState({...state, link: response.link});
+            setState({link: response.link});
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.id]);
@@ -65,7 +66,6 @@ export default function LoggedInHome(props: LoggedInHomeProps): ReactElement {
     }
 
     function logout() {
-        clearTimeout(state.timeout);
         removeSecretCodeCookie();
         redirect('/');
     }
