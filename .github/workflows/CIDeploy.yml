@@ -15,10 +15,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
 
-    - name: npm install and build
-      run: |
-        npm install
-        npm run build
+    - name: npm install
+      run: 'npm install'
+
+    - name: Build
+      run: 'npm run build'
 
     - name: Pushes to github pages repo
       uses: cpina/github-action-push-to-another-repository@main
