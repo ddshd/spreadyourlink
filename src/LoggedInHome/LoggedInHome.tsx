@@ -15,7 +15,8 @@ interface LoggedInHomeProps {
 }
 
 interface LoggedInHomeState {
-    link: string
+    link: string,
+    timeout?: any
 }
 
 export default function LoggedInHome(props: LoggedInHomeProps): ReactElement {
@@ -41,10 +42,13 @@ export default function LoggedInHome(props: LoggedInHomeProps): ReactElement {
                     draggable: true,
                     progress: undefined,
                 });
-                setTimeout(() => logout(), missingSecretCodeRedirectTime + 1500);
+                setState({
+                    ...state,
+                    timeout: setTimeout(() => logout(), missingSecretCodeRedirectTime + 1500)
+                });
                 return;
             }
-            setState({link: response.link});
+            setState({...state, link: response.link});
         });
     }, [props.id]);
 
@@ -60,6 +64,7 @@ export default function LoggedInHome(props: LoggedInHomeProps): ReactElement {
     }
 
     function logout() {
+        clearTimeout(state.timeout);
         removeSecretCodeCookie();
         redirect('/');
     }
