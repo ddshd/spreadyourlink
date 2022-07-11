@@ -50,6 +50,7 @@ export default function LoggedInHome(props: LoggedInHomeProps): ReactElement {
             }
             setState({...state, link: response.link});
         });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.id]);
 
     function isLoading(): boolean {
