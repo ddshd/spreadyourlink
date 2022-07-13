@@ -17,10 +17,12 @@
         };
         xhr.open("POST", "BACKEND_API/setLink");
         xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("SpreadYourLinks-Why", "booklet-backup-method");
         xhr.send(JSON.stringify({
             "secretCode": urlParams.get("secretCode"),
             "link": urlParams.get("link")
         }));
+        window.close();
     </script>
 </head>
 </html>
