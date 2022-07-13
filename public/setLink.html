@@ -1,0 +1,26 @@
+<html>
+
+<title>Set your link</title>
+
+<head>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+                alert(JSON.parse(this.responseText).updated ? "Updated" : "Not Updated");
+            }
+        });
+        xhr.onerror = function(e) {
+            alert("There was an error setting your URL. Open an issue on the GitHub.");
+        };
+        xhr.open("POST", "BACKEND_API/setLink");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(JSON.stringify({
+            "secretCode": urlParams.get("secretCode"),
+            "link": urlParams.get("link")
+        }));
+    </script>
+</head>
+</html>

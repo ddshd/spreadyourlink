@@ -22,7 +22,8 @@ export function booklet(secretCode: string): string {
             }
         });
         xhr.onerror = function(e) {
-            window.open("${BACKEND_API}/setLink/${secretCode}/" + encodeURIComponent(window.location.href));
+            window.open("${window.location.protocol}//${window.location.host}/setLink.html?secretCode=${secretCode}&link="
+                + encodeURIComponent(window.location.href));
         };
         xhr.open("POST", "${BACKEND_API}/setLink");
         xhr.setRequestHeader("Content-Type", "application/json");

@@ -5,10 +5,17 @@ import {BACKEND_API} from "./variables";
 //     secretCode: string
 // }
 
-export interface getLinkResponse {
+interface baseResponse {
     link: string,
     secretCode: string,
+}
+
+export interface getLinkResponse extends baseResponse {
     error: string | null
+}
+
+export interface setLinkResponse extends baseResponse {
+    updated: boolean
 }
 
 export default class restCalls {
@@ -20,6 +27,18 @@ export default class restCalls {
             redirect: 'follow'
         };
         return await (await fetch(`${this.baseURL}/getLink/${secretCode}`, requestOptions)).json();
+    }
+
+    public static async setLink(secretCode: string, link: string): Promise<setLinkResponse> {
+        const requestOptions: RequestInit = {
+            method: 'POST',
+            redirect: 'follow',
+            body: JSON.stringify({
+                secretCode,
+                link
+            })
+        };
+        return await (await fetch(`${this.baseURL}/setLink`, requestOptions)).json();
     }
 
     public static async createNewSecretCode(): Promise<Response> {
