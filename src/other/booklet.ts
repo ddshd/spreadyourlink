@@ -15,15 +15,22 @@ function bookletCleanup(booklet: string) {
 
 export function booklet(secretCode: string): string {
     const actualCode = bookletCleanup(`
+        const windowReference = window.open();
         const xhr = new XMLHttpRequest();
+        function openNewWindow() {
+           windowReference.location = "${window.location.protocol}//${window.location.host}/setLink.html?secretCode=${secretCode}&link="
+                + encodeURIComponent(window.location.href);
+        }
         xhr.addEventListener("readystatechange", function() {
             if(this.readyState === 4) {
+                if (this.responseText == "") {
+                    openNewWindow();
+                }
                 alert(JSON.parse(this.responseText).updated ? "Updated" : "Not Updated");
             }
         });
         xhr.onerror = function(e) {
-            window.open("${window.location.protocol}//${window.location.host}/setLink.html?secretCode=${secretCode}&link="
-                + encodeURIComponent(window.location.href));
+            openNewWindow();
         };
         xhr.open("POST", "${BACKEND_API}/setLink");
         xhr.setRequestHeader("Content-Type", "application/json");
