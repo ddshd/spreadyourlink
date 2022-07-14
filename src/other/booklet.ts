@@ -18,19 +18,32 @@ export function booklet(secretCode: string): string {
         const windowReference = window.open();
         const xhr = new XMLHttpRequest();
         function openNewWindow() {
-           windowReference.location = "${window.location.protocol}//${window.location.host}/setLink.html?secretCode=${secretCode}&link="
-                + encodeURIComponent(window.location.href);
+           const url = "${window.location.protocol}//${window.location.host}/setLink.html?secretCode=${secretCode}&link="
+                    + encodeURIComponent(window.location.href);
+           try {
+               windowReference.location = url;
+           }
+           catch {
+                if (confirm("Your browser doesn't support any of our primary methods for updating the URL. We have 
+                one more method, however, this will cause your page to redirect. This may cause you to lose any 
+                information you have entered on this page. Is this okay?")) {
+                    window.location.assign(url);
+                }
+                return;
+           }
         }
         xhr.addEventListener("readystatechange", function() {
             if(this.readyState === 4) {
                 if (this.responseText == "") {
                     openNewWindow();
+                    return;
                 }
                 alert(JSON.parse(this.responseText).updated ? "Updated" : "Not Updated");
             }
         });
         xhr.onerror = function(e) {
             openNewWindow();
+            return;
         };
         xhr.open("POST", "${BACKEND_API}/setLink");
         xhr.setRequestHeader("Content-Type", "application/json");
