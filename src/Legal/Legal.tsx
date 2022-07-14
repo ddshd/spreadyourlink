@@ -91,11 +91,18 @@ export default function Legal(): ReactElement {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography>Project License</Typography>
+                    <Typography>Attribution</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Button href="https://raw.githubusercontent.com/ddshd/spreadyourlink/main/LICENSE">Front-end license
-                        details</Button>
+                    <div>
+                        <Button href="https://raw.githubusercontent.com/ddshd/spreadyourlink/main/LICENSE">Front-end
+                            license
+                            details</Button>
+                    </div>
+                    <div>
+                        <Button href="https://www.flaticon.com/free-icons/link" title="link icons">Some icons created by
+                            Freepik - Flaticon</Button>
+                    </div>
                 </AccordionDetails>
             </Accordion>
         </div>

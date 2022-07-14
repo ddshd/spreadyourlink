@@ -1,7 +1,7 @@
 import {BACKEND_API} from "./variables";
 
 function bookletCleanup(booklet: string) {
-        return booklet.replaceAll('\n', '')
+    return booklet.replaceAll('\n', '')
         .replaceAll(new RegExp(/\s*\{\s*/gm), '{')
         .replaceAll(new RegExp(/\s*}\s*/gm), '}')
         .replaceAll(new RegExp(/\s*\)\s*/gm), ')')
