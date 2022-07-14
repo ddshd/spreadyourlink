@@ -15,7 +15,8 @@ function bookletCleanup(booklet: string) {
 }
 
 export function booklet(secretCode: string): string {
-    const actualCode = bookletCleanup(`
+    /* eslint-disable */
+    const actualCode = `
         const windowReference = window.open();
         const xhr = new XMLHttpRequest();
         function openNewWindow() {
@@ -49,6 +50,6 @@ export function booklet(secretCode: string): string {
         xhr.send(JSON.stringify({
             "secretCode": "${secretCode}",
             "link": window.location.href
-        }));`);
-    return `javascript:${encodeURIComponent(`(function(){${actualCode.trim()}})();`)}`;
+        }));`;
+    return `javascript:${encodeURIComponent(`(function(){${bookletCleanup(actualCode.trim())}})();`)}`;
 }
