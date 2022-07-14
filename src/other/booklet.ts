@@ -10,6 +10,7 @@ function bookletCleanup(booklet: string) {
         .replaceAll(new RegExp(/\s*,\s*/gm), ',')
         .replaceAll(new RegExp(/\s*:\s*/gm), ':')
         .replaceAll(new RegExp(/\s*\?\s*/gm), '?')
+        .replaceAll(new RegExp(/\s*\+\s*/gm), '+')
         .replaceAll(new RegExp(/\s*;\s*/gm), ';');
 }
 
@@ -24,9 +25,7 @@ export function booklet(secretCode: string): string {
                windowReference.location = url;
            }
            catch {
-                if (confirm("Your browser doesn't support any of our primary methods for updating the URL. We have 
-                one more method, however, this will cause your page to redirect. This may cause you to lose any 
-                information you have entered on this page. Is this okay?")) {
+                if (confirm(\"Your browser does not support any of our primary methods for updating the URL. We have one more method, however, this will cause your page to redirect. This may cause you to lose any information you have entered on this page. Is this okay?\")) {
                     window.location.assign(url);
                 }
                 return;
