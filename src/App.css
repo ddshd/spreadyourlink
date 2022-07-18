@@ -29,9 +29,22 @@
 input[name=secret-code] {
     user-select: initial;
     -webkit-user-select: initial;
+    cursor: initial;
+}
+
+pre {
+    user-select: all;
+    -webkit-user-select: all;
+    cursor: initial;
 }
 
 .AccordionDetails-text {
     font-size: 0.6em;
     text-align: left;
+}
+
+.top-buttons {
+    position: fixed !important;
+    top: 10px;
+    right: 15px;
 }
