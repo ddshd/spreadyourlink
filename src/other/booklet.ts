@@ -24,7 +24,7 @@ export function booklet(secretCode: string): string {
            try {
                var openedWindow = window.open(url);
                if(!openedWindow || openedWindow.closed || typeof openedWindow.closed === "undefined")  {
-                throw new Error('Popup blocked, throwing exception to be caught.');
+                throw new Error("Popup blocked, throwing exception to be caught.");
                }
            }
            catch {
