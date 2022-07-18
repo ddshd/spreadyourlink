@@ -135,8 +135,8 @@ export default function LoggedInHome(props: LoggedInHomeProps): ReactElement {
             <div className='top-buttons'>
                 <Chip className='bookmark-button-chip' color="warning" label={
                     <span className='bookmark-button'>
-                                <BookmarkIcon fontSize='small'/> Bookmark this page for easy access
-                            </span>
+                        <BookmarkIcon fontSize='small'/> Bookmark this page for easy access
+                    </span>
                 }/>
 
                 <Tooltip arrow TransitionComponent={Zoom} title="Logout">

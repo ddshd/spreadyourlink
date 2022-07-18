@@ -14,12 +14,13 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import {redirect, removeSecretCodeCookie} from "../other/cookies";
-import './NewUserHome.css';
 import {TransitionProps} from "@mui/material/transitions";
+import LoadingButton from '@mui/lab/LoadingButton';
+import {CountdownCircleTimer} from "react-countdown-circle-timer";
+import './NewUserHome.css';
+import {redirect, removeSecretCodeCookie} from "../other/cookies";
 import {WEBSITE_NAME} from "../other/variables";
 import restCalls from "../other/restCalls";
-import {CountdownCircleTimer} from "react-countdown-circle-timer";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -33,23 +34,25 @@ const Transition = React.forwardRef(function Transition(
 
 interface NewUserHomeState {
     userEnteredSecretCode: string;
-    dialogOpen: boolean;
     rateLimitExpire: number;
 }
 
 export default function NewUserHome(): ReactElement {
     const [state, setState] = useState<NewUserHomeState>({
         userEnteredSecretCode: "",
-        dialogOpen: false,
-        rateLimitExpire: 0
+        rateLimitExpire: 0,
     });
+    const [loadingState, setLoadingState] = useState<boolean>(false);
+    const [dialogOpen, setDialogState] = useState<boolean>(false);
     removeSecretCodeCookie();
 
     async function handleClose(termsAgreed: boolean) {
-        setState({...state, dialogOpen: false});
+        setDialogState(false);
         if (termsAgreed) {
+            setLoadingState(true);
             const apiRes = await restCalls.createNewSecretCode();
             const apiResData = await apiRes.json();
+            setLoadingState(false);
 
             if (apiRes.ok && apiResData.inserted) {
                 redirect(`/${apiResData.secretCode}`);
@@ -63,7 +66,7 @@ export default function NewUserHome(): ReactElement {
         return (
             <div>
                 <Dialog
-                    open={state.dialogOpen}
+                    open={dialogOpen}
                     TransitionComponent={Transition}
                     keepMounted
                     onClose={() => handleClose(false)}
@@ -89,7 +92,7 @@ export default function NewUserHome(): ReactElement {
     }
 
     function handleClickOpen() {
-        setState({...state, dialogOpen: true});
+        setDialogState(true);
     }
 
     function rateLimitTimer(): ReactElement {
@@ -122,6 +125,30 @@ export default function NewUserHome(): ReactElement {
                 {timerChild}
             </CountdownCircleTimer>
         </span>);
+    }
+
+    function renderCard() {
+        if (loadingState) {
+            return (<LoadingButton
+                size="large"
+                loading={loadingState}
+                variant="contained"
+                disabled
+            >Loading</LoadingButton>);
+        }
+        else if (state.rateLimitExpire + Date.now() - 2 >= Date.now()) {
+            return rateLimitTimer();
+        }
+        else {
+            return (<><Typography sx={{mb: 1.5}} color="text.secondary">
+                Get a secret code
+            </Typography><span>
+                <CardActions disableSpacing>
+                    <Button color='success' onClick={handleClickOpen} fullWidth
+                            variant='contained' type="submit" size="small">Go</Button>
+                </CardActions>
+            </span></>);
+        }
     }
 
     return (
@@ -173,16 +200,7 @@ export default function NewUserHome(): ReactElement {
                             <Typography gutterBottom variant="h5" component="div">
                                 New user?
                             </Typography>
-                            {state.rateLimitExpire + Date.now() - 2 < Date.now() ?
-                                (<><Typography sx={{mb: 1.5}} color="text.secondary">
-                                    Get a secret code
-                                </Typography><span>
-                                            <CardActions disableSpacing>
-                                                <Button color='success' onClick={handleClickOpen} fullWidth
-                                                        variant='contained' type="submit" size="small">Go</Button>
-                                            </CardActions>
-                                        </span></>) : rateLimitTimer()
-                            }
+                            {renderCard()}
                         </CardContent>
                     </Card>
                 </Grid>
