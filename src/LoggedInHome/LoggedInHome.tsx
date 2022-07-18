@@ -58,8 +58,7 @@ export default function LoggedInHome(props: LoggedInHomeProps): ReactElement {
         return state.link === 'Loading...';
     }
 
-    function handleFocus() {
-        // event.target.select();
+    function handleLinkClick() {
         if (!isLoading()) {
             navigator.clipboard.writeText(state.link).then();
         }
@@ -107,8 +106,8 @@ export default function LoggedInHome(props: LoggedInHomeProps): ReactElement {
                     <div>
                         <Tooltip disableHoverListener={isLoading()} arrow TransitionComponent={Zoom}
                                  title="Copy link to clipboard">
-                            <Button onClick={handleFocus}>
-                                <TextField id="redirect-link" onFocus={handleFocus} disabled
+                            <Button onClick={handleLinkClick}>
+                                <TextField id="redirect-link" onFocus={handleLinkClick} disabled
                                            value={state.link}/>
                             </Button>
                         </Tooltip>
