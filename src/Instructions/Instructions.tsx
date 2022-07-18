@@ -1,4 +1,4 @@
-import {Accordion, AccordionDetails, AccordionSummary, Button, Chip, Typography} from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, Button, Chip, Tooltip, Typography, Zoom} from "@mui/material";
 import React, {ReactElement} from "react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {booklet} from "../other/booklet";
@@ -8,13 +8,14 @@ import InfoIcon from '@mui/icons-material/Info';
 import './Instructions.css';
 
 export default function Instructions(): ReactElement {
-    const bookletText = booklet(getSecretCodeCookie());
+    const secretCode = getSecretCodeCookie();
+    const bookletText = booklet(secretCode);
 
     return (
         <div className="App-header App fix-nav-hidden-content">
             <h1>Instructions</h1>
 
-            {getSecretCodeCookie() ?
+            {secretCode ?
 
                 <>
                     <h2 style={{marginBottom: '0px'}}>How do I update my link?</h2>
@@ -55,11 +56,17 @@ export default function Instructions(): ReactElement {
                     </Accordion>
 
                     <div className='top-buttons'>
-                        <Chip color="info" label={
-                            <span className='secret-code-info'>
-                                <InfoIcon className='secret-code-info-icon' fontSize='small'/> Your secret code is {getSecretCodeCookie()}
-                            </span>
-                        }/>
+                        <Tooltip arrow TransitionComponent={Zoom}
+                                 title="Copy secret code to clipboard">
+                            <Chip onClick={() => {
+                                navigator.clipboard.writeText(secretCode).then();
+                            }} color="info" label={
+                                <span className='secret-code-info'>
+                                    <InfoIcon className='secret-code-info-icon' fontSize='small'/>
+                                    Your secret code is {secretCode}
+                                </span>
+                            }/>
+                        </Tooltip>
                     </div>
                 </>
 
