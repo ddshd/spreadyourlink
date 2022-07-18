@@ -1,9 +1,11 @@
-import {Accordion, AccordionDetails, AccordionSummary, Button, Typography} from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, Button, Chip, Typography} from "@mui/material";
 import React, {ReactElement} from "react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {booklet} from "../other/booklet";
 import {getSecretCodeCookie} from "../other/cookies";
 import {Link} from "react-router-dom";
+import InfoIcon from '@mui/icons-material/Info';
+import './Instructions.css';
 
 export default function Instructions(): ReactElement {
     const bookletText = booklet(getSecretCodeCookie());
@@ -51,6 +53,14 @@ export default function Instructions(): ReactElement {
                             </div>
                         </AccordionDetails>
                     </Accordion>
+
+                    <div className='top-buttons'>
+                        <Chip color="info" label={
+                            <span className='secret-code-info'>
+                                <InfoIcon className='secret-code-info-icon' fontSize='small'/> Your secret code is {getSecretCodeCookie()}
+                            </span>
+                        }/>
+                    </div>
                 </>
 
 
