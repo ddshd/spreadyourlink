@@ -22,6 +22,8 @@ jobs:
       run: 'npm run build'
       env:
         REACT_APP_BACKEND_API: ${{ secrets.REACT_APP_BACKEND_API }}
+        REACT_APP_GA_ID: ${{ secrets.REACT_APP_GA_ID }}
+        REACT_APP_GTM_ID: ${{ secrets.REACT_APP_GTM_ID }}
 
     - name: Pushes to github pages repo
       uses: cpina/github-action-push-to-another-repository@main
