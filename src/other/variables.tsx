@@ -9,6 +9,9 @@ export const CONTACT_EMAIL: string = "spreadyourlinks@iamdhrumilshah.com";
 export const ADDITIONAL_SERVICES: string = "Google Analytics, Google Cloud Platform, Heroku, Google Safe Browsing API, MongoDB Cloud, and Github";
 export const BACKEND_API: string = process.env.REACT_APP_BACKEND_API || "http://localhost:8080";
 
+export const GA_ID: string = process.env.REACT_APP_GA_ID || "";
+export const GTM_ID: string = process.env.REACT_APP_GTM_ID || "";
+
 export function WEBSITE_URL(): string {
     return window.location.hostname;
 }

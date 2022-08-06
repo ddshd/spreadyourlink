@@ -21,6 +21,7 @@ import './NewUserHome.css';
 import {redirect, removeSecretCodeCookie} from "../other/cookies";
 import {WEBSITE_NAME} from "../other/variables";
 import restCalls from "../other/restCalls";
+import TagManager from 'react-gtm-module';
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -47,22 +48,65 @@ export default function NewUserHome(): ReactElement {
     removeSecretCodeCookie();
 
     async function handleClose(termsAgreed: boolean) {
+        TagManager.dataLayer({
+            dataLayer: {
+                event: "signupDialog_closed",
+                frontend: true,
+                termsAgreed: termsAgreed,
+                time: Date.now().toLocaleString()
+            },
+            dataLayerName: "PageDataLayer"
+        });
+
         setDialogState(false);
         if (termsAgreed) {
             setLoadingState(true);
             const apiRes = await restCalls.createNewSecretCode();
+
+            const gtm_tag_manager_data_layer = {
+                dataLayer: {
+                    event: "new_secret_code",
+                    frontend: true,
+                    failed: false,
+                    secret_code: "",
+                    reason: ""
+                },
+                dataLayerName: "PageDataLayer"
+            };
+
             const apiResData = await apiRes.json();
             setLoadingState(false);
 
             if (apiRes.ok && apiResData.inserted) {
+
+                gtm_tag_manager_data_layer.dataLayer.failed = false;
+                gtm_tag_manager_data_layer.dataLayer.secret_code = apiResData.secretCode;
+                gtm_tag_manager_data_layer.dataLayer.reason = "";
+                TagManager.dataLayer(gtm_tag_manager_data_layer);
+
                 redirect(`/${apiResData.secretCode}`);
             } else if (apiRes.headers.get('RateLimit-Reset')) {
+
+                gtm_tag_manager_data_layer.dataLayer.failed = true;
+                gtm_tag_manager_data_layer.dataLayer.secret_code = "";
+                gtm_tag_manager_data_layer.dataLayer.reason = "Rate_Limited";
+                TagManager.dataLayer(gtm_tag_manager_data_layer);
+
                 setState({...state, rateLimitExpire: +(apiRes.headers.get('RateLimit-Reset') || "0")});
             }
         }
     }
 
     function signupDialog(): ReactNode {
+        TagManager.dataLayer({
+            dataLayer: {
+                event: "signupDialog_opened",
+                frontend: true,
+                time: Date.now().toLocaleString()
+            },
+            dataLayerName: "PageDataLayer"
+        });
+
         return (
             <div>
                 <Dialog

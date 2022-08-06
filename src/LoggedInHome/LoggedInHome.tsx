@@ -9,6 +9,7 @@ import restCalls, {getLinkResponse} from "../other/restCalls";
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import TagManager from 'react-gtm-module';
 
 interface LoggedInHomeProps {
     id: string
@@ -31,8 +32,25 @@ export default function LoggedInHome(props: LoggedInHomeProps): ReactElement {
                 return;
             }
         }
+
+        const gtm_tag_manager_data_layer = {
+            dataLayer: {
+                event: "getting_link",
+                frontend: true,
+                failed: false,
+                link: ""
+            },
+            dataLayerName: "PageDataLayer"
+        };
+
         restCalls.getLink(props.id).then((response: getLinkResponse) => {
             if (response.error) {
+
+                gtm_tag_manager_data_layer.dataLayer.failed = true;
+                gtm_tag_manager_data_layer.dataLayer.link = "";
+                TagManager.dataLayer(gtm_tag_manager_data_layer);
+
+
                 toast.error(response.error, {
                     position: "bottom-left",
                     autoClose: missingSecretCodeRedirectTime,
@@ -49,6 +67,11 @@ export default function LoggedInHome(props: LoggedInHomeProps): ReactElement {
                 }, missingSecretCodeRedirectTime + 1500)
                 return;
             }
+
+            gtm_tag_manager_data_layer.dataLayer.failed = false;
+            gtm_tag_manager_data_layer.dataLayer.link = response.link;
+            TagManager.dataLayer(gtm_tag_manager_data_layer);
+
             setState({link: response.link});
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
