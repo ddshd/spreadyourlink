@@ -5,6 +5,7 @@ import App from './App';
 import TagManager from "react-gtm-module";
 import {GTM_ID, GA_ID} from "./other/variables";
 import ReactGA from 'react-ga';
+import {SnackbarProvider} from "notistack";
 
 ReactGA.initialize(GA_ID);
 ReactGA.pageview(window.location.pathname + window.location.hash);
@@ -19,6 +20,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <React.StrictMode>
-        <App/>
+        <SnackbarProvider maxSnack={3}>
+            <App/>
+        </SnackbarProvider>
     </React.StrictMode>
 );

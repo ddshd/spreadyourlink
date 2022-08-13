@@ -22,6 +22,7 @@ import {redirect, removeSecretCodeCookie} from "../other/cookies";
 import {WEBSITE_NAME} from "../other/variables";
 import restCalls from "../other/restCalls";
 import TagManager from 'react-gtm-module';
+import {useSnackbar} from "notistack";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -39,6 +40,7 @@ interface NewUserHomeState {
 }
 
 export default function NewUserHome(): ReactElement {
+    const { enqueueSnackbar } = useSnackbar();
     const [state, setState] = useState<NewUserHomeState>({
         userEnteredSecretCode: "",
         rateLimitExpire: 0,
@@ -61,7 +63,9 @@ export default function NewUserHome(): ReactElement {
         setDialogState(false);
         if (termsAgreed) {
             setLoadingState(true);
-            const apiRes = await restCalls.createNewSecretCode();
+            const apiRes = await restCalls.createNewSecretCode((message: string) => {
+                enqueueSnackbar(message);
+            });
 
             const gtm_tag_manager_data_layer = {
                 dataLayer: {

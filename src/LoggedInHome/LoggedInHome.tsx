@@ -10,6 +10,7 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import TagManager from 'react-gtm-module';
+import {useSnackbar} from "notistack";
 
 interface LoggedInHomeProps {
     id: string
@@ -20,7 +21,7 @@ interface LoggedInHomeState {
 }
 
 export default function LoggedInHome(props: LoggedInHomeProps): ReactElement {
-
+    const { enqueueSnackbar } = useSnackbar();
     const missingSecretCodeRedirectTime = 5000;
     const [state, setState] = useState<LoggedInHomeState>({link: "Loading..."});
     setSecretCodeCookie(props.id);
@@ -43,7 +44,9 @@ export default function LoggedInHome(props: LoggedInHomeProps): ReactElement {
             dataLayerName: "PageDataLayer"
         };
 
-        restCalls.getLink(props.id).then((response: getLinkResponse) => {
+        restCalls.getLink(props.id, (message: string) => {
+            enqueueSnackbar(message);
+        }).then((response: getLinkResponse) => {
             if (response.error) {
 
                 gtm_tag_manager_data_layer.dataLayer.failed = true;
