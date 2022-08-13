@@ -14,8 +14,6 @@ It's a pretty simple concept - it has three basic components:
 
 ## Status
 
-### Front-end build
-[![CI - Deploy](https://github.com/ddshd/spreadyourlink/actions/workflows/CIDeploy.yml/badge.svg)](https://github.com/ddshd/spreadyourlink/actions/workflows/CIDeploy.yml)
-
-### Github Pages publish status
-[![pages-build-deployment](https://github.com/spreadyourlinks/spreadyourlinks.github.io/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/spreadyourlinks/spreadyourlinks.github.io/actions/workflows/pages/pages-build-deployment)
+[![Front-end React build](https://github.com/ddshd/spreadyourlink/actions/workflows/CIDeploy.yml/badge.svg)](https://github.com/ddshd/spreadyourlink/actions/workflows/CIDeploy.yml)
+[![Github Pages Build](https://github.com/spreadyourlinks/spreadyourlinks.github.io/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/spreadyourlinks/spreadyourlinks.github.io/actions/workflows/pages/pages-build-deployment)
+[![Backend Heroku Push](https://github.com/ddshd/spreadyourlinks-backend/actions/workflows/PushToHeroku.yml/badge.svg)](https://github.com/ddshd/spreadyourlinks-backend/actions/workflows/PushToHeroku.yml)
