@@ -1,7 +1,12 @@
-
 name: CI - Deploy
 
 on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
   push:
     branches:
       - main
@@ -33,5 +38,5 @@ jobs:
         source-directory: 'build'
         destination-github-username: 'spreadyourlinks'
         destination-repository-name: 'spreadyourlinks.github.io'
-        user-email: me@iamdhrumilshah.com
+        user-email: spreadyourlinks@iamdhrumilshah.com
         target-branch: gitcopy
